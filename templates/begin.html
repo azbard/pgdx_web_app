@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="col-md-4 py-1 my-2">
+    <div class="container-md py-1 border rounded my-3">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-botttom mb-4">Batch Processing</legend>
+                <div class="form-group my-1">
+                    <!-- <span class="me-2">Process Latest Batch:</span> -->
+                    {{ form.process_latest(class="btn btn-outline-primary") }}
+                </div>
+                <hr>
+                <div class="form-group my-3">
+                    <a type="button" href="{{ url_for('enterbatch') }}" class="btn btn-outline-primary">
+                        Process Another Batch</a>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+{% endblock content %}

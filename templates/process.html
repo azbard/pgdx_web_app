@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% if not going %}
+<div class="col-md-4 py-1 my-2">
+    <div class="container-md py-4 border rounded my-3">
+
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend>Confirmation</legend>
+                <small class="text-muted"> Last chance to go back!</small>
+                <div class="form-group mt-4 mb-2">
+                    {{ form.yes(class="btn btn-outline-primary") }}
+                    <a type="button" href="{{ url_for('home') }}" class="btn btn-outline-primary">
+                        No! Go Back</a>
+                </div>
+    </div>
+</div>
+{% else %}
+<div class="container-md py-1 border rounded my-3">
+    <pre>
+    {% for x in result %}
+    {{ x }}
+    {% endfor %}
+</pre>
+</div>
+{% endif %}
+{% endblock content %}

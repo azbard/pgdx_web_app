@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="col-md-4 py-1 my-2">
+    <div class="container-md py-1 border rounded my-3">
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-botttom mb-4">Login</legend>
+                <div class="form-group my-1">
+                    {{ form.password.label(class="form-control-label") }}
+                    {{ form.password(class="form-control form-control-lg") }}
+                    <small id="emailHelp" class="form-text text-muted">
+                        Not your personal password - the departmental
+                        PGDx reporting password.</small>
+                </div>
+                <div class="form-check my-1">
+                    {{ form.remember(class="form-check-input") }}
+                    {{ form.remember.label(class="form-check-label small") }}
+                </div>
+            </fieldset>
+            </fieldset>
+            <div class="form-group my-2">
+                {{ form.submit(class="btn btn-outline-primary") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

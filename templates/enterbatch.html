@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="col-md-4 py-1 my-2">
+    <div class="container-md py-1 border rounded my-3">
+
+        <form method="POST" action="">
+
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-botttom mb-4">Batch Processing</legend>
+                <div class="form-group my-2">
+                    <div>
+                        <div>Enter a Batch ID</div>
+                        <small id="emailHelp" class="form-text text-muted">e.g B21-1 or 20-55</small>
+                    </div>
+                    {{ form.batch(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group my-2">
+                    {{ form.submit_batch(class="btn btn-outline-primary") }}
+                </div>
+                <hr>
+                <div class="form-group my-3">
+
+                    <a type="button" href="{{ url_for('begin') }}" class="btn btn-outline-primary">
+                        Go Back</a>
+                </div>
+            </fieldset>
+
+        </form>
+
+    </div>
+</div>
+{% endblock content %}
