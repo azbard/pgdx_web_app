@@ -19,11 +19,11 @@ except:
 if comp == "AdamP51s":
     # testing environment == my laptop lolz
     run_dir = os.path.abspath(
-        "/mnt/c/Users/adzab/OneDrive - Mass General Brigham/Operations/PGDx/pgdx-reporting"
+        "/mnt/c/Users/adzab/OneDrive - Mass General Brigham/Operations/PGDx/pgdx"
     )
     req_dir = os.path.abspath(
         os.path.join(
-            "/mnt/c/Users/adzab/OneDrive - Mass General Brigham/Operations/PGDx/pgdx-web-app",
+            "/mnt/c/Users/adzab/OneDrive - Mass General Brigham/Operations/PGDx/pgdx/.Bioinformatics",
             "requirements",
         )
     )

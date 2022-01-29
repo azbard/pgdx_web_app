@@ -1,3 +1,4 @@
+# %%
 from pkg_resources import Requirement
 from flask import (
     render_template,
@@ -8,7 +9,13 @@ from flask import (
     stream_with_context,
 )
 from flask_login import login_user, current_user, logout_user, login_required
+import io
 import os
+import sys
+
+# %%
+file_dir = os.path.dirname(__file__)
+sys.path.append(file_dir)
 from pgdxapp import app, bcrypt, admin, elio_dir, req_dir
 from pgdxapp.forms import (
     LoginForm,
@@ -17,12 +24,19 @@ from pgdxapp.forms import (
     ConfirmForm,
     FinalForm,
 )
-from pgdx_reporting.setup import (
-    check_batch_name,
-    get_dir_from_batch,
-    latest_batch_directory,
-    check_batch_already_run,
-)
+
+# %%
+current = os.path.dirname(os.path.realpath(__file__))
+parent = os.path.dirname(current)
+sys.path.append(parent)
+from pgdx_reporting import setup
+
+# (
+#     check_batch_name,
+#     get_dir_from_batch,
+#     latest_batch_directory,
+#     check_batch_already_run,
+# )
 from pgdx_reporting.process import pgdx_process
 
 
@@ -57,10 +71,10 @@ def begin():
         if form.process_latest.data:
             session["latest"] = True
             session["batch"] = None
-            batch_dir = latest_batch_directory(elio_dir)
+            batch_dir = setup.latest_batch_directory(elio_dir)
             if batch_dir:
                 session["batch_dir"] = os.path.join(elio_dir, batch_dir)
-                check = check_batch_already_run(session["batch_dir"])
+                check = setup.check_batch_already_run(session["batch_dir"])
                 if check:
                     return redirect(url_for("confirm"))
                 else:
@@ -80,12 +94,12 @@ def enterbatch():
         if form.batch.data:
             session["latest"] = False
             session["batch"] = form.batch.data
-            check = check_batch_name(session["batch"])
+            check = setup.check_batch_name(session["batch"])
             if check:
-                candidate = get_dir_from_batch(elio_dir, check)
+                candidate = setup.get_dir_from_batch(elio_dir, check)
                 if candidate:
                     session["batch_dir"] = os.path.join(elio_dir, candidate)
-                    check = check_batch_already_run(session["batch_dir"])
+                    check = setup.check_batch_already_run(session["batch_dir"])
                     print(check)
                     if check:
                         return redirect(url_for("confirm"))
@@ -136,13 +150,34 @@ def process():
                 "danger",
             )
             with app.app_context():
-                rows = pgdx_process(session["batch_dir"], req_dir, "yield")
+
+                def func():
+                    """
+                    This function takes the pgdx_process function and 
+                    converts all print statements into yields 
+                    """
+                    yield ("Starting up ...")
+
+                    try:
+                        _stdout = sys.stdout
+                        sys.stdout = output = io.StringIO()
+                        pgdx_process(session["batch_dir"], req_dir)
+                        output.seek(0)
+                        for line in output:
+                            sys.stdout = _stdout
+                            yield "{}".format(line.strip("\n"))
+                            sys.stdout = output
+                    finally:
+                        sys.stdout.close()  # close the StringIO object
+                        sys.stdout = _stdout  # restore sys.stdout
+
                 return app.response_class(
                     stream_with_context(
                         stream_template(
-                            "process.html", result=rows, form=form, going=True
+                            "process.html", result=func(), form=form, going=True
                         )
                     )
                 )
     else:
         return render_template("process.html", form=form, going=False)
+
