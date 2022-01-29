@@ -171,10 +171,12 @@ def process():
                         sys.stdout.close()  # close the StringIO object
                         sys.stdout = _stdout  # restore sys.stdout
 
+                rows = func()
+
                 return app.response_class(
                     stream_with_context(
                         stream_template(
-                            "process.html", result=func(), form=form, going=True
+                            "process.html", result=rows, form=form, going=True
                         )
                     )
                 )
