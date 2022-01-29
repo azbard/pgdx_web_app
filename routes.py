@@ -157,6 +157,8 @@ def process():
                     converts all print statements into yields 
                     """
                     yield ("Starting up ...")
+                    yield ("Please be patient - this may take up to 15 minutes.")
+                    yield ("Usual text output will appear when process is finished.")
 
                     try:
                         _stdout = sys.stdout
