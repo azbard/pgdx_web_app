@@ -30,7 +30,7 @@ if comp == "AdamP51s":
 else:
     # production environment
     run_dir = os.path.abspath("/mnt/pgdx_v1")
-    req_dir = os.path.abspath("/var/www/pgdx-web-app/requirements")
+    req_dir = os.path.abspath("/mnt/pgdx_v1/.Bioinformatics/requirements")
 
 elio_dir = os.path.join(run_dir, "ElioConnect_Output")
 
