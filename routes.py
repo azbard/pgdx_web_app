@@ -30,13 +30,6 @@ current = os.path.dirname(os.path.realpath(__file__))
 parent = os.path.dirname(current)
 sys.path.append(parent)
 from pgdx_reporting import setup
-
-# (
-#     check_batch_name,
-#     get_dir_from_batch,
-#     latest_batch_directory,
-#     check_batch_already_run,
-# )
 from pgdx_reporting.process import pgdx_process
 
 
@@ -174,7 +167,7 @@ def process():
                         sys.stdout = _stdout  # restore sys.stdout
 
                 rows = func()
-
+                session.pop("_flashes", None)
                 return app.response_class(
                     stream_with_context(
                         stream_template(
