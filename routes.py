@@ -158,10 +158,13 @@ def process():
                         sys.stdout = output = io.StringIO()
                         pgdx_process(session["batch_dir"], req_dir)
                         output.seek(0)
-                        for line in output:
-                            sys.stdout = _stdout
-                            yield "{}".format(line.strip("\n"))
-                            sys.stdout = output
+                        try:
+                            for line in output:
+                                sys.stdout = _stdout
+                                yield "{}".format(line.strip("\n"))
+                                sys.stdout = output
+                        except Exception as e:
+                            yield e
                     finally:
                         sys.stdout.close()  # close the StringIO object
                         sys.stdout = _stdout  # restore sys.stdout
